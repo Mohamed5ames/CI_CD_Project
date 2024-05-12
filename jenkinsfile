@@ -11,6 +11,7 @@ pipeline {
         
         stage('build') {
             steps {
+                sh 'who'
                 sh 'docker build -f dockerfile . -t mohamed5ames/django:v1.0'
             }
         }
