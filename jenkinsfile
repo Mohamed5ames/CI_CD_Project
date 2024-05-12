@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('preperation') {
+            steps {
+                git 'https://github.com/Mohamed5ames/CI_CD_Project'
+            }
+        }
+    
+        
+        stage('build') {
+            steps {
+                sh 'docker build -f dockerfile . -t mohamed5ames/django:v1.0'
+            }
+        }
+    
+        
+        stage('push') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+                        docker.image('mohamed5ames/django:v1.0').push('latest')
+                    }
+                }           
+             }
+        }
+    
+        
+        stage('deploy') {
+            steps {
+                sh 'docker run -d -p 7999:8000 mohamed5ames/django:v1.0'
+            }
+        }
+    }
+}
